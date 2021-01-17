@@ -1,0 +1,84 @@
+package pageFactory;
+
+import java.util.List;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class loginPage {
+	WebDriver driver;
+
+	// clickable elements
+	@FindBy(xpath = "//a[@href=\"/\"]/img")
+	WebElement homePageClick;
+	@FindBy(xpath = "//a[@id=\"dang-nhap\"]")
+	WebElement loginLinkText;
+	@FindBy(xpath = "//*[@id=\"main-content\"]/div/div/div[1]/div[1]/div/div[3]/button")
+	WebElement btnLogin;
+	@FindBy(xpath = "//*[@id=\"main-content\"]/div/div/div[2]/div[4]/div/div[2]/button")
+	WebElement btnRetry;
+
+	// input Elements
+	@FindBy(xpath = "//input[@id='phone']")
+	WebElement inputPhone;
+	@FindBy(xpath = "//input[@id='password']")
+	WebElement inputPassword;
+
+	public loginPage(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
+
+	// get Elements
+	public WebElement getLoginLinkText() {
+		return this.loginLinkText;
+	}
+
+	public WebElement getBtnLogin() {
+		return this.btnLogin;
+	}
+
+	public WebElement getBtnRetry() {
+		return this.btnRetry;
+	}
+
+	/* click elements */
+//	public void returnHomePage() {
+//		this.homePageClick.click();
+//	}
+
+	public void goLogin() {
+		this.loginLinkText.click();
+	}
+
+	public void clickLogin() {
+		this.btnLogin.click();
+	}
+
+	public void retryClick() {
+		this.btnRetry.click();
+	}
+
+
+	// set value
+	public void setPhone(String phone) {
+		inputPhone.clear();
+		this.inputPhone.sendKeys(phone);
+	}
+
+	public void setPassword(String password) {
+		inputPassword.clear();
+		this.inputPassword.sendKeys(password);
+	}
+
+	// Functions Elements
+	public void login(String phone, String password) throws InterruptedException {
+		this.setPhone(phone);
+		this.setPassword(password);
+		Thread.sleep(1000);
+		this.clickLogin();
+	}
+
+}

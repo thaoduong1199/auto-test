@@ -1,0 +1,88 @@
+package pageFactory;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class homePage {
+	WebDriver driver;
+	//Ä�Æ°á»�ng dáº«n cho cÃ¡c elements
+	@FindBy(xpath = "//li[@class=' sub-menu-parent ']//a[text()='Truyền hình']")
+	WebElement tv;
+	@FindBy(xpath = "//li[@class=\" sub-menu-parent \"]//a[text()=\"TV show\"]")
+	WebElement tvShow;
+	@FindBy(xpath = "//li[@class=\" sub-menu-parent \"]//a[text()=\"Anime\"]")
+	WebElement anime;
+	@FindBy(xpath = "//li[@class=\" sub-menu-parent \"]//a[text()=\"Thiếu nhi\"]")
+	WebElement kid;
+	@FindBy(xpath = "//li[@class=\" sub-menu-parent \"]//a[text()=\"Hài\"]")
+	WebElement comedy;
+	@FindBy(xpath = "//li[@class=\" sub-menu-parent \"]//a[text()=\"Thể thao\"]")
+	WebElement sport;
+	@FindBy(xpath = "//h3[text()=\"Phim bá»™ hot\"]")
+	WebElement waitToClick;
+	@FindBy(xpath = "//a[@href=\"/\"]/img" )
+	WebElement homePageClick;
+	@FindBy(xpath = "//button[text()=\"Ä�Äƒng nháº­p\"]" )
+	WebElement waitLogin;
+	@FindBy(xpath = "//a[contains(text(),\"Táº¥t cáº£\")]" )
+	WebElement waitAll;
+	@FindBy(xpath =  "//h3[text()=\"KÃªnh tráº£ phÃ­\"]")
+	WebElement waitPayChannel;
+	@FindBy(xpath = "//img[@src=\"/images/the-thao/logo.png\"]")
+	WebElement waitSport;
+	@FindBy(xpath = "//img[@id=\"imgHolder\"]")
+	WebElement waitAdd;
+	
+	public homePage(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
+	//Click Elements
+	public void clickTV() {
+		this.tv.click();
+	}
+	public void clicktvShow() {
+		tvShow.click();
+	}
+
+	public void clickanime() {
+		anime.click();
+	}
+
+	public void clickkid() {
+		kid.click();
+	}
+
+	public void clickcomedy() {
+		comedy.click();
+	}
+	public void clickSport() {
+		sport.click();
+	}
+	public void homePageClick() {
+		homePageClick.click();
+	}
+	
+	//Get Elements
+	public WebElement waitFor() {
+		return waitToClick;
+	}
+	public WebElement waitForPay() {
+		return waitLogin;
+	}
+	public WebElement waitForAll() {
+		return waitAll;
+	}
+	public WebElement waitForSport() {
+		return waitSport;
+	}
+	public WebElement waitForPayChannel() {
+		return this.waitPayChannel;
+	}
+	public WebElement waitAdd() {
+		return waitAdd;
+	}
+	
+}

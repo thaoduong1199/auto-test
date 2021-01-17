@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//factory/baseFactory.java=UTF-8
+encoding//factory/titleFactory.java=UTF-8
+encoding//pageFactory/homePage.java=UTF-8
+encoding//pageFactory/loginPage.java=UTF-8
+encoding//test/loginTest.java=UTF-8

@@ -1,0 +1,157 @@
+package test;
+
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+import org.testng.annotations.Test;
+
+import factory.ExcelUtils;
+import factory.baseFactory;
+import factory.loginFactory;
+import factory.serviceFactory;
+import pageFactory.loginPage;
+
+public class loginTest extends loginFactory {
+	
+	//Ä�Æ°á»�ng dáº«n Ä‘áº¿n file excel
+	public final String FILEPATH = "D:\\FptVN.xlsx";
+	public final String SHEET = "LoginTest";
+	
+	//Row vÃ  Col trong file Excel
+	public final int ROW = 11;
+	public final int COL = 9;
+	public final int RESULT_COL = 8;
+	public final int EXPECTED_COL = 6 ;
+  	public final int PHONE_COL =3;
+	public final int PASSWORD_COL =4;
+	public final int SUCCESS_DATA_ROW=9;
+	
+	//LiÃªn káº¿t
+	
+	
+	//Url
+	public final String homeURL = "https://fptplay.vn/";
+	public final String loginURL = "https://fptplay.vn/dang-nhap?reqPage=%2F";
+	
+	//Khai biáº¿n
+	public String phone;
+	public String password;
+
+	
+	@Test(priority = 2)
+	public void verifyLog() throws Exception {
+		
+		
+		//Set file Excel
+		ExcelUtils.setExcelFile(FILEPATH, SHEET);
+		
+		// Thực hiện các bước theo manual
+		objService.waitForElementToClickable(objLogin.getLoginLinkText());
+		objLogin.goLogin();
+		
+		objService.waitForElementToClickable(objLogin.getBtnLogin());
+		//Láº¥y dá»¯ liá»‡u tá»« Excel
+		phone = ExcelUtils.getCellData(SUCCESS_DATA_ROW, PHONE_COL);
+		password = ExcelUtils.getCellData(SUCCESS_DATA_ROW, PASSWORD_COL);
+		//Ä�Äƒng nháº­p
+		objLogin.login(phone,password);
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		Thread.sleep(3000);
+		//XÃ©t trÆ°á»�ng há»£p cÃ³ Ä‘Äƒng nháº­p vÃ o thiáº¿t bá»‹ khÃ¡c
+		if (driver.getCurrentUrl().equals(homeURL)) {
+			//TrÆ°á»�ng chÆ°a Ä‘Äƒng nháº­p vÃ o thiáº¿t bá»‹ khÃ¡c
+			objService.waitForElementToClickable(objLogin.getAvatarSpan());
+			objLogin.avatarClick();
+			//So sÃ¡ch vá»›i káº¿t quáº£ trong file Excel
+			
+			if(objLogin.getTextAccountID().equals(ExcelUtils.getCellData(SUCCESS_DATA_ROW, EXPECTED_COL))) {
+				ExcelUtils.setCellData(SUCCESS_DATA_ROW, RESULT_COL, "Sucess");
+				ExcelUtils.closeandsaveFile(FILEPATH);
+			}else {
+				ExcelUtils.setCellData(SUCCESS_DATA_ROW, RESULT_COL, "Failed");
+				ExcelUtils.closeandsaveFile(FILEPATH);
+			}
+			Assert.assertEquals(objLogin.getTextAccountID(), ExcelUtils.getCellData(SUCCESS_DATA_ROW, EXPECTED_COL));
+			objLogin.logoutClick();
+
+		} else if(driver.getCurrentUrl().equals(loginURL)) {
+			//TrÆ°á»�ng há»£p Ä‘Ã£ Ä‘Äƒng nháº­p vÃ o thiáº¿t bá»‹ khÃ¡c
+			Thread.sleep(3000);
+			//Chá»�n tiáº¿p tá»¥c
+			objLogin.continueClick();
+			objService.waitForElementToClickable(objLogin.getAvatarSpan());
+			objLogin.avatarClick();
+			//So sÃ¡nh vá»›i káº¿t quáº£ trong file Excel
+			
+			if(objLogin.getTextAccountID().equals(ExcelUtils.getCellData(SUCCESS_DATA_ROW, EXPECTED_COL))) {
+				ExcelUtils.setCellData(SUCCESS_DATA_ROW, RESULT_COL, "Sucess");
+				ExcelUtils.closeandsaveFile(FILEPATH);
+			}else {
+				ExcelUtils.setCellData(SUCCESS_DATA_ROW, RESULT_COL, "Failed");
+				ExcelUtils.closeandsaveFile(FILEPATH);
+			}
+			Assert.assertEquals(objLogin.getTextAccountID(), ExcelUtils.getCellData(SUCCESS_DATA_ROW, EXPECTED_COL));
+			objLogin.logoutClick();
+		}
+
+	}
+
+	@Test(priority = 1)
+	public void verifyLoginFailed1() throws Exception {
+		//Khá»Ÿi táº¡o POM vÃ  factory
+		
+		//Set Excel File
+		ExcelUtils.setExcelFile(FILEPATH, SHEET);
+		ExcelUtils.setrowcolumn(ROW, COL);
+		//Di chuyá»ƒn Ä‘áº¿n trang Ä‘Äƒng nháº­p
+		objService.waitForElementToClickable(objLogin.getLoginLinkText());
+		objLogin.goLogin();
+		//VÃ²ng láº·p Ä‘á»ƒ Ä‘á»�c dá»¯ liá»‡u trong Excel
+		
+		for (int i = 1; i < ExcelUtils.getrow() - 2; i++) {
+			//Truyá»�n dá»¯ liá»‡u Ä‘á»ƒ Ä‘Äƒng nháº­p
+			phone = ExcelUtils.getCellData(i, PHONE_COL);
+			password = ExcelUtils.getCellData(i, PASSWORD_COL);
+			objService.waitForElementToClickable(objLogin.getBtnLogin());
+			objLogin.login(phone, password);
+			
+			objService.waitForElementToClickable(objLogin.getBtnRetry());
+			//Xuáº¥t hiá»‡n 1 trong 2 thÃ´ng bÃ¡o
+			if (objLogin.failMessage2Size() > 0 ){
+				//Xuáº¥t hiá»‡n thÃ´ng bÃ¡o Ä‘áº§u tiá»�n vÃ  so sÃ¡nh thÃ´ng bÃ¡o vá»›i káº¿t quáº£ trong file excel vÃ  chá»�n thá»­ láº¡i
+				
+				
+				if(objLogin.loginFailedMessage2().equals(ExcelUtils.getCellData(i, EXPECTED_COL))) {
+					ExcelUtils.setCellData(i, RESULT_COL, "Sucess");
+					ExcelUtils.closeandsaveFile(FILEPATH);
+				}else {
+					ExcelUtils.setCellData(i, RESULT_COL, "Failed");
+					ExcelUtils.closeandsaveFile(FILEPATH);
+				}
+				Assert.assertEquals(objLogin.loginFailedMessage2(), ExcelUtils.getCellData(i, EXPECTED_COL));
+				objLogin.retryClick();
+				
+
+			}
+			if (objLogin.failMessage1Size() > 0 ) {
+				//Xuáº¥t hiá»‡n thÃ´ng bÃ¡o thá»© 2 vÃ  so sÃ¡nh thÃ´ng bÃ¡o vá»›i káº¿t quáº£ trong file excel vÃ  chá»�n thá»­ láº¡i
+				
+			
+				if(objLogin.loginFailedMessage1().equals(ExcelUtils.getCellData(i, EXPECTED_COL))) {
+					ExcelUtils.setCellData(i, RESULT_COL, "Sucess");
+					ExcelUtils.closeandsaveFile(FILEPATH);
+				}else {
+					ExcelUtils.setCellData(i, RESULT_COL, "Failed");
+					ExcelUtils.closeandsaveFile(FILEPATH);
+				}
+				Assert.assertEquals(objLogin.loginFailedMessage1(), ExcelUtils.getCellData(i, EXPECTED_COL));
+				objLogin.retryClick();
+				
+			}
+		}
+
+	}
+
+
+
+}

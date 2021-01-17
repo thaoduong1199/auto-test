@@ -1,0 +1,6 @@
+ackage interfare;
+
+public interface ILoginTest {
+	public void login(String phone, String password);
+
+}

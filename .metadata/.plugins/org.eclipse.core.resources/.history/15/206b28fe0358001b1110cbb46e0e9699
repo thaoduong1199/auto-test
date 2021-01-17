@@ -1,0 +1,136 @@
+package pageFactory;
+
+import java.util.List;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class loginPage {
+	WebDriver driver;
+	
+	//clickable elements
+	@FindBy(xpath = "//a[@href=\"/\"]/img" )
+	WebElement homePageClick;
+	@FindBy(xpath = "//a[@id=\"dang-nhap\"]")
+	WebElement loginLinkText;
+	@FindBy(xpath = "//*[@id=\"main-content\"]/div/div/div[1]/div[1]/div/div[3]/button")
+	WebElement btnLogin;
+	@FindBy(xpath = "//li//div//a[@class=\"global-image\"]")
+	WebElement avatarSpan;
+	@FindBy(xpath = "//*[@id='dang-xuat']")
+	WebElement logout;
+	@FindBy(xpath = "//div[@class='signup-error']//button[text()='Thử lại']")
+	WebElement btnRetry;
+	@FindBy(xpath = "//button[contains(text(),'Tiếp tục')]")
+	WebElement btnContinue;
+	
+	//text elements
+	@FindBy(xpath = "//*[@id='trang-ca-nhan']")
+	WebElement accountID;
+	@FindBy(xpath = "//p[text()=\"Điện thoại hoặc mật khẩu không đúng!\"]")
+	WebElement loginFailMessage1;
+	@FindBy(xpath = "//p[text()=\"Xảy ra lỗi trong quá trình đăng nhập!\"]")
+	WebElement loginFailMessage2;
+	
+	@FindBy(xpath = "//p[text()=\"Điện thoại hoặc mật khẩu không đúng!\"]")
+	List<WebElement> loginFailMessage1s;
+	@FindBy(xpath = "//p[text()=\"Xảy ra lỗi trong quá trình đăng nhập!\"]")
+	List<WebElement> loginFailMessage2s;
+	
+	//input Elements
+	@FindBy(xpath = "//input[@id='phone']")
+	WebElement inputPhone;
+	@FindBy(xpath = "//input[@id='password']")
+	WebElement inputPassword;
+	
+	public loginPage(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
+	
+	//get Elements
+	public WebElement getLoginLinkText() {
+		return this.loginLinkText;
+	}
+	public WebElement getBtnLogin() {
+		return this.btnLogin;
+	}
+	public WebElement getBtnContinue() {
+		return this.btnContinue;
+	}
+	public WebElement getBtnRetry() {
+		return this.btnRetry;
+	}
+	public WebElement getAvatarSpan() {
+		return this.avatarSpan;
+	}
+	public WebElement getFailedMessage1() {
+		return this.loginFailMessage1;
+	}
+	public WebElement getFailedMessage2() {
+		return this.loginFailMessage2;
+	}
+	
+	/*click elements*/
+	public void returnHomePage() {
+		this.homePageClick.click();
+	}
+	public void goLogin() {
+		this.loginLinkText.click();
+	}
+	public void clickLogin() {
+		this.btnLogin.click();
+	}
+	public void avatarClick() {
+		this.avatarSpan.click();
+	}
+	public void logoutClick() {
+		this.logout.click();
+	}
+	public void retryClick() {
+		this.btnRetry.click();
+	}
+	public void continueClick() {
+		this.btnContinue.click();
+	}
+	
+	//get text Elements
+	public String getTextAccountID() {
+		return this.accountID.getText();
+	}
+	public String loginFailedMessage1() {
+		return this.loginFailMessage1.getText();
+	}
+	public String loginFailedMessage2() {
+		return this.loginFailMessage2.getText();
+	}
+	
+	//set value
+	public void setPhone(String phone) {
+		inputPhone.clear();
+		this.inputPhone.sendKeys(phone);
+	}
+	public void setPassword(String password) {
+		inputPassword.clear();
+		this.inputPassword.sendKeys(password);
+	}
+	
+	//get size
+	public int failMessage1Size() {
+		return this.loginFailMessage1s.size();
+	}
+	public int failMessage2Size() {
+		return this.loginFailMessage2s.size();
+	}
+	
+	//Functions Elements
+	public void login(String phone, String password) throws InterruptedException {
+		this.setPhone(phone);
+		this.setPassword(password);
+		Thread.sleep(1000);
+		this.clickLogin();
+	}
+
+}
